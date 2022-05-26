@@ -23,10 +23,14 @@
 
 // Program constant definitions
 const unsigned char maxCount = 50;
+ #define pressed 0
+ #define notPressed 1
 
 // Program variable definitions
 unsigned char SW2Count = 0;
+unsigned char SW5Count = 0;
 bool SW2Pressed = false;
+bool SW5Pressed = false;
 
 int main(void)
 {
@@ -37,32 +41,75 @@ int main(void)
     // Code in this while loop runs repeatedly.
     while(1)
 	{
-        // Count SW2 button presses
-        if(SW2 == 0)
+       // Player 1 
+        if(SW2 == pressed && SW2Pressed == false)
         {
             LED3 = 1;
-            SW2Count = SW2Count + 1;
+            if(SW2Count < 255)
+            {
+                SW2Count = SW2Count + 1;
+            }
+            SW2Pressed = true;
         }
-        else
+
+        // Clear pressed state if released for SW2
+        if(SW2 == notPressed)
         {
             LED3 = 0;
+            SW2Pressed = false;
         }
-        
+
+        // Player 2   
+        if(SW5 == pressed && SW5Pressed == false)
+        {
+            LED6 = 1;
+            if(SW5Count < 255)
+            {
+                SW5Count = SW5Count + 1;
+            }
+            SW5Pressed = true;
+        }
+
+        // Clear pressed state if released for SW5
+        if(SW5 == notPressed)
+        {
+            LED6 = 0;
+            SW5Pressed = false;
+        }
+
+        // Turn on LED D4 for P1
         if(SW2Count >= maxCount)
         {
             LED4 = 1;
         }
-        
-        // Reset count and turn off LED D4
-        if(SW3 == 0)
+        else
         {
             LED4 = 0;
+        }
+        //Turn on LED D4 for P2
+        if(SW5Count >= maxCount)
+        {
+            LED5 = 1;
+        }
+        else
+        {
+            LED5 = 0;
+        }
+
+        // Reset count and turn off LED D4
+        if(SW3 && SW5 == 0)
+        {
+            LED4 = 0;
+            LED5 = 0;
             SW2Count = 0;
+            SW5Count = 0;
         }
         
         // Add a short delay to the main while loop.
         __delay_ms(10);
-        
+
+        // Toggle button
+
         // Activate bootloader if SW1 is pressed.
         if(SW1 == 0)
         {
@@ -78,21 +125,21 @@ int main(void)
  *    What is the the maximum value an 8-bit variable can store? What are some
  *    of the benefits and drawbacks of using 8-bit variables in an 8-bit
  *    microcontroller?
- * 
+ ~ The maximum value of 8-bit variable is 255. 
  * 2. The constant 'maxCount' is defined using a declaration similar to that
  *    used for the SW2Count variable, but with the 'const' prefix added in the
  *    declaration. Can you think of some advantages of declaring a constant like
  *    this, using a separate statement above the main code, rather than just
  *    embedding the value of the constant where it is needed in the code?
- * 
+ ~  
  * 3. This program should light LED D3 every time SW2 is pressed, and light
  *    LED D4 once the count reaches 50. Try it, and count how many times you
  *    have to press the button until LED D4 turns on. SW3 resets the count so
  *    you can perform repeated attempts.
- * 
+ ~ It took me 9 presses to turn on LED D4.  
  *    Did your count reach 50? Can you describe what the program is doing?
  *    (Hint: try pressing and releasing the button at different rates of speed.)
- * 
+ ~ My count didn't reach 50. Each time I press SW2, LED3 turns on and SW2Count 
  * 4. Modify the second 'if' structure to add the else block, as shown below:
 
         if(SW2Count >= maxCount)
@@ -109,7 +156,8 @@ int main(void)
  *    higher than maxCount. If LED D4 turns off, what can you infer about the
  *    value of the SW2Count variable? Can you explain what happens to the
  *    SW2Count variable as the SW2 button is held?
- * 
+ ~ If D4 turns off, that means the maximum value has been reached, so it starts again from 0. 
+ ~ And zero is less/not equal to max count. The SW2Count is been added by 1 while holding SW2.   
  * 5. We can set a limit on the SW2Count variable by encapsulating its increment
  *    statement inside a conditional statement. In your program, replace the
  *    line 'SW2Count = SW2Count + 1;' with the code, below:
@@ -124,7 +172,8 @@ int main(void)
  *    but in a more compact form. After adding this code, what is the maximum
  *    value that the SW2Count variable will reach? How does this affect the
  *    operation of LED D4 when SW2 is held?
- *
+ ~ The maximum value SW2Count can reach is 255. LED D4 won't turn it's self off because the if statement says if(SW2Count < 255) add 1 to SW2Count. 
+ ~ And when you hold SW2Count will equal to 255, so it won't add 1 value to start the code again.   
  * 6. The fundamental problem with this program is that pushbutton SW2 is sensed
  *    in each cycle of the loop, and if its state is read as pressed, another
  *    count is added to the SW2Count variable. The program needs to be made to
@@ -184,7 +233,7 @@ int main(void)
  *    program more readable at the expense of hiding the actual switch value in
  *    the definition statement instead of making it obvious in the if structure.
  *    Try it in your code, and modify the SW3 reset button to work with the same
- *    pressed adn notPressed definitions.
+ *    pressed and notPressed definitions.
  
         // Count new SW2 button presses
         if(SW2 == pressed && SW2Pressed == false)
