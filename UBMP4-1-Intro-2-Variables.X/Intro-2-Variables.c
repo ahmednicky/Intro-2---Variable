@@ -59,6 +59,16 @@ int main(void)
             SW2Pressed = false;
         }
 
+        // Turn on LED D4 for P1
+        if(SW2Count >= maxCount)
+        {
+            LED4 = 1;
+        }
+        else
+        {
+            LED4 = 0;
+        }
+
         // Player 2   
         if(SW5 == pressed && SW5Pressed == false)
         {
@@ -77,16 +87,7 @@ int main(void)
             SW5Pressed = false;
         }
 
-        // Turn on LED D4 for P1
-        if(SW2Count >= maxCount)
-        {
-            LED4 = 1;
-        }
-        else
-        {
-            LED4 = 0;
-        }
-        //Turn on LED D4 for P2
+          //Turn on LED D5 for P2
         if(SW5Count >= maxCount)
         {
             LED5 = 1;
@@ -97,7 +98,7 @@ int main(void)
         }
 
         // Reset count and turn off LED D4
-        if(SW3 && SW5 == 0)
+        if(SW3 == 0 || SW4 == 0)
         {
             LED4 = 0;
             LED5 = 0;
@@ -266,7 +267,73 @@ int main(void)
  *    second palyer wins. Use a logical condition statement to reset the game
  *    by clearing the count and turning off the LEDs if either SW3 or SW4 is
  *    pressed.
- * 
+      while(1)
+	{
+       // Player 1 
+        if(SW2 == pressed && SW2Pressed == false)
+        {
+            LED3 = 1;
+            if(SW2Count < 255)
+            {
+                SW2Count = SW2Count + 1;
+            }
+            SW2Pressed = true;
+        }
+
+        // Clear pressed state if released for SW2
+        if(SW2 == notPressed)
+        {
+            LED3 = 0;
+            SW2Pressed = false;
+        }
+
+        // Turn on LED D4 for P1
+        if(SW2Count >= maxCount)
+        {
+            LED4 = 1;
+        }
+        else
+        {
+            LED4 = 0;
+        }
+
+        // Player 2   
+        if(SW5 == pressed && SW5Pressed == false)
+        {
+            LED6 = 1;
+            if(SW5Count < 255)
+            {
+                SW5Count = SW5Count + 1;
+            }
+            SW5Pressed = true;
+        }
+
+        // Clear pressed state if released for SW5
+        if(SW5 == notPressed)
+        {
+            LED6 = 0;
+            SW5Pressed = false;
+        }
+
+          //Turn on LED D5 for P2
+        if(SW5Count >= maxCount)
+        {
+            LED5 = 1;
+        }
+        else
+        {
+            LED5 = 0;
+        }
+
+        // Reset count and turn off LED D4
+        if(SW3 == 0 || SW4 == 0)
+        {
+            LED4 = 0;
+            LED5 = 0;
+            SW2Count = 0;
+            SW5Count = 0;
+        }
+        
  * 2. Use your knowledge of Boolean variables and logical conditions to simulate
  *    a toggle button. Each new press of the toggle button will 'toggle' an LED
  *    to its opposite state. (Toggle buttons are commonly used as push-on, 
