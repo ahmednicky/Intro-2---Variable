@@ -45,28 +45,23 @@ int main(void)
         // Adding SW2Count & while loop
         if(SW2 == 0)
         {
-            SW2Count ++;
-            while(SW2 == 0);
+            LED3 = 1;
+            if(SW2Count < 255)
+            {
+                SW2Count ++;
+                while(SW2 == 0);
+                __delay_ms(50);
+            }
         }
-        // One Bounce
+        // Turn on D3
         if(SW2Count == 1)
         {
             LED3 = 1;
         }
-        // Two Bounces
+        // Turn on D4
         if(SW2Count == 2)
         {
             LED4 = 1;
-        }
-        // Three Bounces
-        if(SW2Count == 3)
-        {
-            LED5 = 1;
-        }
-        // Four Bounces
-        if(SW2Count == 4)
-        {
-            LED6 = 1;
         }
         // Reset it
         if(SW3 == 0 && SW2 == 1)
@@ -98,13 +93,16 @@ int main(void)
  *    What is the the maximum value an 8-bit variable can store? What are some
  *    of the benefits and drawbacks of using 8-bit variables in an 8-bit
  *    microcontroller?
- ~ The maximum value of 8-bit variable is 255. 
+ ~ The maximum value of 8-bit variable is 255. Longer battery life and the 8-bit
+ * microcontroller can withstand 8-bit variable. An 8-bit microcontroller would normally only allow arithmetic operations
+ * that output numbers ranging from 0 to 255, which is a limitation. 
  * 2. The constant 'maxCount' is defined using a declaration similar to that
  *    used for the SW2Count variable, but with the 'const' prefix added in the
  *    declaration. Can you think of some advantages of declaring a constant like
  *    this, using a separate statement above the main code, rather than just
  *    embedding the value of the constant where it is needed in the code?
- ~  
+ ~ Putting the declaration above the main code will tell the code to anticipate/familiarize itself. 
+ * Putting the constant where it is needed in the code... the code will think that this is a code and print an error. 
  * 3. This program should light LED D3 every time SW2 is pressed, and light
  *    LED D4 once the count reaches 50. Try it, and count how many times you
  *    have to press the button until LED D4 turns on. SW3 resets the count so
@@ -130,7 +128,7 @@ int main(void)
  *    value of the SW2Count variable? Can you explain what happens to the
  *    SW2Count variable as the SW2 button is held?
  ~ If D4 turns off, that means the maximum value has been reached, so it starts again from 0. 
- ~ And zero is less/not equal to max count. The SW2Count is been added by 1 while holding SW2.   
+ * And zero is less/not equal to max count. The SW2Count is been added by 1 while holding SW2.   
  * 5. We can set a limit on the SW2Count variable by encapsulating its increment
  *    statement inside a conditional statement. In your program, replace the
  *    line 'SW2Count = SW2Count + 1;' with the code, below:
@@ -146,7 +144,7 @@ int main(void)
  *    value that the SW2Count variable will reach? How does this affect the
  *    operation of LED D4 when SW2 is held?
  ~ The maximum value SW2Count can reach is 255. LED D4 won't turn it's self off because the if statement says if(SW2Count < 255) add 1 to SW2Count. 
- ~ And when you hold SW2Count will equal to 255, so it won't add 1 value to start the code again.   
+ * And when you hold SW2Count will equal to 255, so it won't add 1 value to start the code again.   
  * 6. The fundamental problem with this program is that pushbutton SW2 is sensed
  *    in each cycle of the loop, and if its state is read as pressed, another
  *    count is added to the SW2Count variable. The program needs to be made to
@@ -310,7 +308,7 @@ int main(void)
  *    a toggle button. Each new press of the toggle button will 'toggle' an LED
  *    to its opposite state. (Toggle buttons are commonly used as push-on, 
  *    push-off power buttons in digital devices.)
-          // Toggle button
+        // Toggle button
         if(SW2 == 0 && SW2Pressed == false)
         {
             SW2Pressed = true;
@@ -363,7 +361,7 @@ int main(void)
  *    to reset the count and turn off the LEDs so that the test can be repeated.
  *    To determine if your switches bounce, try pressing them at various speeds
  *    and using different amounts of force.
- l
+ 
          // Adding SW2Count & while loop
         if(SW2 == 0)
         {
